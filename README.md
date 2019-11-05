@@ -1,3 +1,11 @@
+#cordova插件，使用ffmpeg转码MP3
+
+参考
+
+https://github.com/tanersener/mobile-ffmpeg/wiki/Android
+
+https://github.com/adminy/cordova-plugin-ffmpeg
+
 # Cordova FFMPEG (mp3) Plugin
 
 Simple plugin that binds mobile ffmpeg to execute ffmpeg commands
