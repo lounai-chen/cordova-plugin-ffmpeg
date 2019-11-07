@@ -1,4 +1,11 @@
-#cordova插件，使用ffmpeg转码MP3
+# cordova插件，使用ffmpeg转码MP3
+
+需要配合以下插件一起使用
+
+cordova-plugin-media （录音）
+
+cordova-plugin-file （文件路径 ）
+
 
 参考
 
@@ -19,13 +26,13 @@ Create a new Cordova Project
 Install the plugin
 
     $ cd hello
-    $ cordova plugin add https://github.com/adminy/cordova-plugin-ffmpeg.git
+    $ cordova plugin add https://github.com/lounai-chen/cordova-plugin-ffmpeg
     
 
 Edit `www/js/index.js` and add the following code inside `onDeviceReady`
 
 ```js
-    ffmpeg.exec("-i someinput.mp4 -vn -c:a copy out.mp3", success => alert(success), failure => alert(failure));
+    ffmpeg.exec("-i someinput.wav out.mp3", success => alert(success), failure => alert(failure));
 ```
 
 Make sure you have the files that will be required by ffmpeg

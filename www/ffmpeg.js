@@ -1,7 +1,9 @@
 /*global cordova, module*/
+var exec = require('cordova/exec');
 
-module.exports = {
-    exec: function (cmd, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "FFMpeg", "exec", [cmd]);
+var ffmpeg = {
+    exec: function (fileName,fileType, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "FFMpeg", "exec", [fileName,fileType]);
     }
 };
+module.exports = ffmpeg;

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>Apache Cordova</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+            <div onclick="startRecord()" id="ff" style="margin:15px;height: 35px;width:100%;background-color: blue;color:#ffffff" >开启录音</div>
+            <div onclick="stopRecord()" style="margin:15px;height: 35px;width:100%; background-color: green;color:#ffffff" >停止录音</div>
+            <div onclick="palyRecord()" style="margin:15px;height: 35px;width:100%;background-color:rgba(65, 231, 129);color:#ffffff" >播放录音</div>    
+            <div onclick="transformMp3()" style="margin:15px;height: 35px;width:100%;background-color:rgba(65, 231, 129);color:#ffffff" >转码</div>    
+            <div onclick="palyformMp3()" id="ff" style="margin:15px;height: 35px;width:100%;background-color: blue;color:#ffffff" >播放转码音频</div>
+            <div onclick="uploadRecord()" style="margin:15px;height: 35px;width:100%;background-color:rgba(65, 231, 129);color:#ffffff" >上传文件到服务器</div>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script  type="text/javascript">
+       
+var recordFileUrl = '';
+var recordName = '';
+var my_media = {startRecord:null,stopRecord:null,play:null};
+
+//转码
+function transformMp3(){
+    try{
+        var arry = recordName.split("."); 
+        ffmpeg.exec(arry[0],arry[1], onSuccess, onError);
+    }catch(e){
+        alert(e);
+    }        
+}
+
+
+function startRecord(){
+    try{ 
+      //初始化文件
+      recordName = generateFileName() + ".wav";
+      //recordFileUrl = "cdvfile://localhost/temporary/"+recordName;
+     
+      if(cordova.file.documentsDirectory){ //IOS
+        recordFileUrl = cordova.file.documentsDirectory+"/"+recordName; 
+      }
+      else if(cordova.file.externalRootDirectory){//安卓  
+        recordFileUrl = cordova.file.externalRootDirectory+"/"+recordName; 
+      } 
+      alert(recordFileUrl);
+      my_media =  new Media(recordFileUrl, onSuccess, onError);
+      //开始录音
+      my_media.startRecord();
+    }catch(e){alert(e)}
+    
+  }
+
+  function stopRecord(){
+    try{
+      my_media.stopRecord();
+    }catch(e){alert(e)} 
+  }
+  function palyformMp3(){
+    try{
+    var arry = recordFileUrl.split("."); 
+    var recordFileUrlMP3 = arry[0]+"_ffmpeg.mp3";
+    alert(recordFileUrlMP3);
+    my_media =  new Media(recordFileUrlMP3, onSuccess, onError); 
+      my_media.play();
+    }catch(e){alert(e)} 
+  }
+  function palyRecord(){
+    try{
+      my_media =  new Media(recordFileUrl, onSuccess, onError); 
+      my_media.play();
+    }catch(e){alert(e)}  
+  }
+  // 生成录音文件名的方法：yyyymmddhhmmss(月和日不足两位补0)
+  function complement(n) { return n < 10 ? '0' + n : n }
+  function generateFileName() {
+    var date = new Date();
+    return date.getFullYear().toString() + complement(date.getMonth() + 1) + complement(date.getDate()) + complement(date.getHours()) + complement(date.getMinutes()) + complement(date.getSeconds());
+  }
+  function onSuccess(e){
+      if(e){
+        alert("成功"+JSON.stringify(e));
+      }
+      else {
+        alert("成功");
+      }
+  }
+  function onError(e){
+    alert("失败"+JSON.stringify(e));
+  }
+
+  function uploadRecord(){
+    try{
+    //   let options: FileUploadOptions = {											
+    //     fileKey: this.recordName,											
+    //     fileName: this.recordName,											
+    //     mimeType: "audio/wav"											
+    //   };	
+    //   const ftObj: FileTransferObject = this.ft.create();		
+    //   ftObj.upload(this.recordFileUrl,											
+    //     encodeURI("http://xxx/appapi/upload/file"), options).then(											
+    //     (data) => {											
+    //       alert("File upload success!"+ JSON.stringify(data));											
+    //     },											
+    //     (err) => {											
+    //       alert("File upload fail!"+ JSON.stringify(err));											
+    //     });	 
+    }catch(e){alert(e)} 
+  }
+        </script>
+    </body>
+</html>
