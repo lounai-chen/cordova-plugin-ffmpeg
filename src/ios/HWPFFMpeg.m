@@ -5,9 +5,20 @@
 
 - (void)exec:(CDVInvokedUrlCommand*)command {
     //https://github.com/tanersener/mobile-ffmpeg/wiki/IOS
-    NSString* cmd = [[command arguments] objectAtIndex:0];
+    NSString* fileName = [[command arguments] objectAtIndex:0];
+    NSString* fileType = [[command arguments] objectAtIndex:1];
     NSString* responseToUser;
-    [MobileFFmpeg execute: cmd];
+
+    // 取得沙盒目录
+    NSString *localPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+     
+    NSString *sourceFileName = [NSString stringWithFormat:@"%@%@",fileName,@"."+fileType];
+    NSString *toFileName = [NSString stringWithFormat:@"%@%@",fileName+@"_ffmpeg",@".mp3"];
+    
+    NSString *sourceUrl = [localPath  stringByAppendingPathComponent:sourceFileName];
+    NSString *targetUrl = [localPath  stringByAppendingPathComponent:toFileName];
+
+    [MobileFFmpeg execute: @"-i "+sourceUrl+" "+targetUrl];
 
     int returnCode = [MobileFFmpeg getLastReturnCode];
     NSString *output = [MobileFFmpeg getLastCommandOutput];

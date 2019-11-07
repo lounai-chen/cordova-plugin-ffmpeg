@@ -21,7 +21,7 @@ public class FFMpeg extends CordovaPlugin {
             String targetUrl = Environment.getExternalStorageDirectory().getPath()+"/"+fileName+"_ffmpeg.mp3";
             String sourceUrl = Environment.getExternalStorageDirectory().getPath()+"/"+fileName+"."+fileType;
             Date date1 = new Date();
-            SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
+            SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss:SSS");
 
             //Log.i(null, "开始"+dateFormat.format(date1));
             FFmpeg.execute("-i "+sourceUrl+" "+targetUrl);

@@ -74,8 +74,8 @@ function startRecord(){
       recordName = generateFileName() + ".wav";
       //recordFileUrl = "cdvfile://localhost/temporary/"+recordName;
      
-      if(cordova.file.documentsDirectory){ //IOS
-        recordFileUrl = cordova.file.documentsDirectory+"/"+recordName; 
+      if(cordova.file.dataDirectory){ //IOS
+        recordFileUrl = cordova.file.dataDirectory+"/"+recordName; 
       }
       else if(cordova.file.externalRootDirectory){//安卓  
         recordFileUrl = cordova.file.externalRootDirectory+"/"+recordName; 
