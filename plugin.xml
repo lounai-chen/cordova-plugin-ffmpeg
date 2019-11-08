@@ -46,7 +46,7 @@
       </config>
       <pods use-frameworks="true">
           <pod name="Lock" fix-bundle-path="Lock/Auth0.bundle"/>
-          <pod name="mobile-ffmpeg-full" spec="~> 4.3" />
+          <pod name="mobile-ffmpeg-full" spec="~> 4.2.2" />
       </pods>
     </podspec>
   </platform>
