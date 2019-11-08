@@ -45,6 +45,7 @@
           <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="true">
+          <pod name="Lock" fix-bundle-path="Lock/Auth0.bundle"/>
           <pod name="mobile-ffmpeg-full" spec="~> 4.3" />
       </pods>
     </podspec>
